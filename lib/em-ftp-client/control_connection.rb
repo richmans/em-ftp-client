@@ -175,6 +175,14 @@ module EventMachine
         send_data("DELE #{filename}\r\n")
         @responder = :dele_response
       end
+      
+      def close
+        if @data_connection
+          raise "Can not close connection while data connection is still open"
+        end
+        send_data("QUIT\r\n")
+        @responder = :close_response
+      end
 
       def list
         send_data("LIST\r\n")
@@ -301,7 +309,11 @@ module EventMachine
           call_callback(file_list)
         end
       end
-        
+      
+      def close_response(response=nil)
+        close_connection
+        call_callback
+      end
     end
   end
 end

@@ -62,6 +62,13 @@ module EventMachine
         control_connection.callback(&cb)
         control_connection.dele(file)
       end
+      
+     def close
+        @control_connection.callback do 
+          yield if block_given?
+        end
+        @control_connection.close
+      end
     end
   end
 end
