@@ -57,6 +57,11 @@ module EventMachine
         end
         control_connection.pasv
       end
+
+      def delete(file, &cb)
+        control_connection.callback(&cb)
+        control_connection.dele(file)
+      end
     end
   end
 end
