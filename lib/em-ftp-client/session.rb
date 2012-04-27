@@ -59,7 +59,12 @@ module EventMachine
         control_connection.pasv
       end
 
-      def close
+      def delete(file, &cb)
+        control_connection.callback(&cb)
+        control_connection.dele(file)
+      end
+      
+     def close
         @control_connection.callback do 
           yield if block_given?
         end

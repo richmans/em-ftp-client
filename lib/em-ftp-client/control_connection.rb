@@ -170,6 +170,11 @@ module EventMachine
         send_data("STOR #{filename}\r\n")
         @responder = :stor_response
       end
+
+      def dele(filename)
+        send_data("DELE #{filename}\r\n")
+        @responder = :dele_response
+      end
       
       def close
         if @data_connection
@@ -217,6 +222,14 @@ module EventMachine
         end
       end
 
+      # Called when a response for the DELE is received
+      def dele_response(response)
+        if response && response.code != "250"
+          @responder = nil
+          call_callback
+        end
+      end
+      
       # Called when a response for the PWD verb is received
       #
       # Calls out with the result to the callback given to pwd
