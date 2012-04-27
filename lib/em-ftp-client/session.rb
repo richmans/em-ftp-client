@@ -39,6 +39,7 @@ module EventMachine
       end
 
       def stream(&cb); @stream = cb; end
+      def errback(&cb); control_connection.errback(&cb); end
 
       def get(file, &cb)
         control_connection.callback do |data_connection|

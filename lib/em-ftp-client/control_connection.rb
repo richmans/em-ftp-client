@@ -85,7 +85,6 @@ module EventMachine
       end
 
       def receive_line(line)
-        puts line
         @response << line
         if @response.complete?
           # get a new fresh response ready
@@ -109,8 +108,6 @@ module EventMachine
       def data_connection_closed(data)
         @data_buffer = data
         @data_connection = nil
-        puts "Data connection closed"
-        puts @response.body
         send(@responder) if @responder and @response.complete?
         @response = Response.new
       end
@@ -247,10 +244,8 @@ module EventMachine
       # Opens a new data connection and executes the callback
       def pasv_response(response)
         @responder = nil
-        puts "PASV Response #{response.code}"
         if response.code == "227"
           if m = /(\d{1,3},\d{1,3},\d{1,3},\d{1,3}),(\d+),(\d+)/.match(response.body)
-            puts "PASV Connect"
             host_ip = m[1].gsub(",", ".")
             host_port = m[2].to_i*256 + m[3].to_i
             pasv_callback = @callback
