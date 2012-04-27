@@ -97,12 +97,12 @@ module EventMachine
           elsif old_response.mark?
             #maybe notice the mark or something
           elsif old_response.failure?
-            error(old_response)
+            error(old_response.body)
           end
         end
       rescue InvalidResponseFormat => e
         @response = Response.new
-        error(e)
+        error(e.to_s)
       end
 
       def data_connection_closed(data)
@@ -260,7 +260,7 @@ module EventMachine
         if response && response.code != "226"
           @data_connection.close_connection
           @responder = nil
-          error(response)
+          error(response.body)
         end
 
         if response && @data_connection
@@ -280,7 +280,7 @@ module EventMachine
         if response && response.code != "226"
           @data_connection.close_connection
           @responder = nil
-          error(response)
+          error(response.body)
         end
         if @data_connection
           @response = response
@@ -296,7 +296,7 @@ module EventMachine
         if response && response.code != "226"
           @data_connection.close_connection
           @responder = nil
-          error(response)
+          error(response.body)
         end
 
         if response && @data_connection
