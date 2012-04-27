@@ -225,10 +225,8 @@ module EventMachine
 
       # Called when a response for the DELE is received
       def dele_response(response)
-        if response && response.code != "250"
           @responder = nil
           call_callback
-        end
       end
       
       # Called when a response for the PWD verb is received
