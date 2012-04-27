@@ -268,10 +268,13 @@ module EventMachine
           @responder = nil
           error(response)
         end
-
-        @responder = nil
-        @data_buffer = nil
-        call_callback
+        if @data_connection
+          #wait for the connection to complete
+        else
+          @responder = nil
+          @data_buffer = nil
+          call_callback
+        end
       end
 
       def list_response(response=nil)
@@ -282,6 +285,7 @@ module EventMachine
         end
 
         if response && @data_connection
+          @response = response
           #well we still gots to wait for the file
         elsif @data_connection
           #well we need to wait for a response

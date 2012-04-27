@@ -30,7 +30,8 @@ module EventMachine
       end
 
       def list(&cb)
-        control_connection.callback do
+        control_connection.callback do |data_connection|
+          data_connection.stream(&@stream) if @stream
           control_connection.callback(&cb)
           control_connection.list
         end
